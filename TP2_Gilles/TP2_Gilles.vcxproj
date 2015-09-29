@@ -10,6 +10,13 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="struct.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="struct.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{84735F86-92AD-430A-9754-B84697DB4F54}</ProjectGuid>
     <RootNamespace>TP2_Gilles</RootNamespace>
@@ -63,12 +70,6 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="struct.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="struct.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
