@@ -39,6 +39,65 @@ static void init()
 	// Si vous avez des choses à initialiser, c est ici.	
 }
 
+void drawCylindre(float r,float h,const int nbmeridiens){
+
+	//Definir centre :
+	point3 centre = point3(0.,0.,0.);
+	//glRotatef(-90,1.0f,0.0f,0.0f);
+	
+	// Voir plus tard les push et Pop
+	glPushMatrix();
+	glColor3f(0.7,0.7,0.7);
+			glBegin(GL_TRIANGLES);	
+
+
+	for(int i=0;i<nbmeridiens;i++){
+
+		point3 p = point3(r*cos((M_PI/3)*i),r*sin((M_PI)/3*i),h/2);
+		point3 p_ = point3(r*cos((M_PI/3)*i),r*sin((M_PI/3)*i),-h/2);
+		point3 p2 = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),-h/2);
+
+		glColor3f(0.7,0.7,0.7);//couleur gris
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p_.x,p_.y, p_.z);
+		glVertex3f(p2.x,p2.y,p2.z);	
+
+
+		//bouchon bas
+		//p = point3(centre.x,centre.y,-h/2);
+		//glColor3f(0.7,0.0,0.7);//couleur gris
+		//
+		//glVertex3f(p2.x,p2.y,p2.z);
+		//glVertex3f(p.x,p.y, p.z);
+		//glVertex3f(p_.x,p_.y, p_.z);	
+
+
+
+		p = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),-h/2);
+		p_ = point3(r*cos((M_PI/3)*i),r*sin((M_PI/3)*i),h/2);
+		p2 = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),h/2);
+
+		glColor3f(0.7,0.7,0.0); //Couleur jaune
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p_.x,p_.y, p_.z);
+		glVertex3f(p2.x,p2.y,p2.z);	
+
+		////bouchon haut
+		//p = point3(centre.x,centre.y,h/2);
+		//glColor3f(0.0,0.7,0.7);//couleur gris
+		//
+		//glVertex3f(p2.x,p2.y,p2.z);
+		//glVertex3f(p.x,p.y, p.z);
+		//glVertex3f(p_.x,p_.y, p_.z);	
+
+
+	}
+
+	glEnd();
+	glPopMatrix();	
+
+}
+
 
 /* Dessin */
 void display(void)
@@ -55,31 +114,9 @@ void display(void)
 	glRotatef(-angleY,0.0f,0.0f,1.0f);
 	glRotatef(angleX,0.0f,1.0f,0.0f);
 
-	// Voir plus tard les push et Pop
-	glPushMatrix();			
 			
-			//glRotatef(-90,1.0f,0.0f,0.0f);
-			// C'est ici que l'on dessine notre cylindre
-			// Il n'y a pour l'instant qu'un triangle gris ...
-
-			// Exemple d'appel à Point3
-			point3 p1 = point3(-1.0,1.0,0.0);
-			point3 p2 = point3(1,1,0);
-			point3 p3 = point3(1,2,0);
-			//tableau de points
-			point3 tab[2];
-
-			tab[0]=p1;
-			tab[1]=p2;
-
-			glColor3f(0.7,0.7,0.7);
-			glBegin(GL_TRIANGLES);	
-				glVertex3f(tab[0].x,tab[0].y, tab[0].z);
-				glVertex3f(tab[1].x,tab[1].y, tab[1].z);
-				glVertex3f(p3.x,p3.y,p3.z);
-			glEnd();
-	glPopMatrix();			
-
+			
+			drawCylindre(2.,10.,6);		
 
 
 	//affiche les axes du repere
@@ -103,6 +140,8 @@ void display(void)
 
 	glutSwapBuffers();// echange des buffers
 }
+
+
 
 /* Au cas ou la fenetre est modifiee ou deplacee */
 void reshape(int w, int h)
@@ -174,9 +213,9 @@ glutPostRedisplay();
 
 int main(int argc, char **argv)
 {
-   glutInitWindowSize(400, 400);
+   glutInitWindowSize(1000, 1000);
    glutInit(&argc, argv);
-  glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
    glutCreateWindow("Mon cylindre");
    init();
    glutReshapeFunc(reshape);
