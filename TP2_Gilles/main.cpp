@@ -43,17 +43,16 @@ void drawCylindre(float r,float h,const int nbmeridiens){
 
 	//Definir centre :
 	point3 centre = point3(0.,0.,0.);
-	//glRotatef(-90,1.0f,0.0f,0.0f);
-	
-	// Voir plus tard les push et Pop
+
 	glPushMatrix();
-	glColor3f(0.7,0.7,0.7);
-			glBegin(GL_TRIANGLES);	
+	glBegin(GL_TRIANGLES);	
 
 	float angle= (2*M_PI)/nbmeridiens;
 
 	for(int i=0;i<nbmeridiens;i++){
 
+
+		//premier triangle
 		point3 p = point3(r*cos(angle*i),r*sin(angle*i),h/2);
 		point3 p_ = point3(r*cos(angle*i),r*sin(angle*i),-h/2);
 		point3 p2 = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),-h/2);
@@ -65,31 +64,28 @@ void drawCylindre(float r,float h,const int nbmeridiens){
 
 
 		//bouchon bas
-		p = point3(centre.x,centre.y,-h/2);
+		point3 p3 = point3(centre.x,centre.y,-h/2);
 		glColor3f(0.7,0.0,0.7);//couleur gris
 		
 		glVertex3f(p2.x,p2.y,p2.z);
-		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p3.x,p3.y, p3.z);
 		glVertex3f(p_.x,p_.y, p_.z);	
 
-
-
-		p = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),-h/2);
-		p_ = point3(r*cos(angle*i),r*sin(angle*i),h/2);
-		p2 = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),h/2);
-
+		//Deuxiéme triangle
+		p_  = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),h/2);
+	
 		glColor3f(0.7,0.7,0.0); //Couleur jaune
+		glVertex3f(p2.x,p2.y, p2.z);
 		glVertex3f(p.x,p.y, p.z);
-		glVertex3f(p_.x,p_.y, p_.z);
-		glVertex3f(p2.x,p2.y,p2.z);	
+		glVertex3f(p_.x,p_.y,p_.z);	
 
 		//bouchon haut
-		p = point3(centre.x,centre.y,h/2);
+		p3.z= h/2;
 		glColor3f(0.0,0.7,0.7);//couleur gris
 		
-		glVertex3f(p2.x,p2.y,p2.z);
-		glVertex3f(p_.x,p_.y, p_.z);
-		glVertex3f(p.x,p.y, p.z);	
+		glVertex3f(p_.x,p_.y,p_.z);
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p3.x,p3.y, p3.z);	
 
 
 	}
@@ -99,12 +95,13 @@ void drawCylindre(float r,float h,const int nbmeridiens){
 
 }
 
+//Draw Sphere
 void drawSphere(float r,float nbmeridiens,float nbparalleles){
 
 	float anglemeridiens = (2*M_PI)/nbmeridiens;
 	float angleparalleles = M_PI/nbparalleles;
 
-	
+	glPushMatrix();
 	glBegin(GL_TRIANGLES);	
 
 	for(float i=0;i<nbmeridiens;i++){
@@ -120,19 +117,75 @@ void drawSphere(float r,float nbmeridiens,float nbparalleles){
 			glVertex3f(p_.x,p_.y, p_.z);
 
 
-			point3 p3 = point3(r*sin(angleparalleles*(j+1))*cos(anglemeridiens*(i+1)),r*sin(angleparalleles*(j+1))*sin(anglemeridiens*(i+1)),r*cos(angleparalleles*(j+1)));
+			p = point3(r*sin(angleparalleles*(j+1))*cos(anglemeridiens*(i+1)),r*sin(angleparalleles*(j+1))*sin(anglemeridiens*(i+1)),r*cos(angleparalleles*(j+1)));
 
 			glColor3f(0.2,0.2,0.0);//couleur gris
 			glVertex3f(p2.x,p2.y,p2.z);
-			glVertex3f(p3.x,p3.y, p3.z);
+			glVertex3f(p.x,p.y, p.z);
 			glVertex3f(p_.x,p_.y, p_.z);
 
 		}
 	}
+	glPopMatrix();	
 	glEnd();
 }
 
-void drawCone(){
+
+//Draw a Cone
+void drawCone(float r1,float r2,float h,const int nbmeridiens){
+
+	//Definir centre :
+	point3 centre = point3(0.,0.,0.);
+
+	glPushMatrix();
+	
+	glBegin(GL_TRIANGLES);	
+
+	float angle= (2*M_PI)/nbmeridiens;
+
+	for(int i=0;i<nbmeridiens;i++){
+
+
+		//Prermier Triangle
+		point3 p = point3(r1*cos(angle*i),r1*sin(angle*i),h/2);
+		point3 p_ = point3(r2*cos(angle*i),r2*sin(angle*i),-h/2);
+		point3 p2 = point3(r2*cos(angle*(i+1)),r2*sin(angle*(i+1)),-h/2);
+
+		glColor3f(0.7,0.7,0.7);//couleur gris
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p2.x,p2.y,p2.z);
+		glVertex3f(p_.x,p_.y, p_.z);
+
+
+		//bouchon bas
+		point3 p3 = point3(centre.x,centre.y,-h/2);
+		glColor3f(0.7,0.0,0.7);//couleur gris
+		
+		glVertex3f(p2.x,p2.y,p2.z);
+		glVertex3f(p3.x,p3.y, p3.z);
+		glVertex3f(p_.x,p_.y, p_.z);	
+
+		//Deuxiéme triangle
+		p_ = point3(r1*cos(angle*(i+1)),r1*sin(angle*(i+1)),h/2);
+
+		glColor3f(0.7,0.7,0.0); //Couleur jaune
+		glVertex3f(p2.x,p2.y, p2.z);
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p_.x,p_.y,p_.z);	
+
+		//bouchon haut
+		p3 = point3(centre.x,centre.y,h/2);
+		glColor3f(0.0,0.7,0.7);//couleur gris
+		
+		glVertex3f(p_.x,p_.y,p_.z);
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p3.x,p3.y, p3.z);	
+
+
+	}
+
+	glEnd();
+	glPopMatrix();	
 
 }
 
@@ -157,7 +210,8 @@ void display(void)
 			
 			
 		//drawCylindre(2.,10.,360);	
-		//drawSphere(10.,180.,180.);	
+		//drawSphere(10.,180.,180.);
+		drawCone(5.0,1.5,10,360);
 
 
 	//affiche les axes du repere
