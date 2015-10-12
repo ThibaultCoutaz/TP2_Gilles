@@ -50,45 +50,46 @@ void drawCylindre(float r,float h,const int nbmeridiens){
 	glColor3f(0.7,0.7,0.7);
 			glBegin(GL_TRIANGLES);	
 
+	float angle= (2*M_PI)/nbmeridiens;
 
 	for(int i=0;i<nbmeridiens;i++){
 
-		point3 p = point3(r*cos((M_PI/3)*i),r*sin((M_PI)/3*i),h/2);
-		point3 p_ = point3(r*cos((M_PI/3)*i),r*sin((M_PI/3)*i),-h/2);
-		point3 p2 = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),-h/2);
+		point3 p = point3(r*cos(angle*i),r*sin(angle*i),h/2);
+		point3 p_ = point3(r*cos(angle*i),r*sin(angle*i),-h/2);
+		point3 p2 = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),-h/2);
 
 		glColor3f(0.7,0.7,0.7);//couleur gris
 		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p2.x,p2.y,p2.z);
 		glVertex3f(p_.x,p_.y, p_.z);
-		glVertex3f(p2.x,p2.y,p2.z);	
 
 
 		//bouchon bas
-		//p = point3(centre.x,centre.y,-h/2);
-		//glColor3f(0.7,0.0,0.7);//couleur gris
-		//
-		//glVertex3f(p2.x,p2.y,p2.z);
-		//glVertex3f(p.x,p.y, p.z);
-		//glVertex3f(p_.x,p_.y, p_.z);	
+		p = point3(centre.x,centre.y,-h/2);
+		glColor3f(0.7,0.0,0.7);//couleur gris
+		
+		glVertex3f(p2.x,p2.y,p2.z);
+		glVertex3f(p.x,p.y, p.z);
+		glVertex3f(p_.x,p_.y, p_.z);	
 
 
 
-		p = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),-h/2);
-		p_ = point3(r*cos((M_PI/3)*i),r*sin((M_PI/3)*i),h/2);
-		p2 = point3(r*cos((M_PI/3)*(i+1)),r*sin((M_PI/3)*(i+1)),h/2);
+		p = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),-h/2);
+		p_ = point3(r*cos(angle*i),r*sin(angle*i),h/2);
+		p2 = point3(r*cos(angle*(i+1)),r*sin(angle*(i+1)),h/2);
 
 		glColor3f(0.7,0.7,0.0); //Couleur jaune
 		glVertex3f(p.x,p.y, p.z);
 		glVertex3f(p_.x,p_.y, p_.z);
 		glVertex3f(p2.x,p2.y,p2.z);	
 
-		////bouchon haut
-		//p = point3(centre.x,centre.y,h/2);
-		//glColor3f(0.0,0.7,0.7);//couleur gris
-		//
-		//glVertex3f(p2.x,p2.y,p2.z);
-		//glVertex3f(p.x,p.y, p.z);
-		//glVertex3f(p_.x,p_.y, p_.z);	
+		//bouchon haut
+		p = point3(centre.x,centre.y,h/2);
+		glColor3f(0.0,0.7,0.7);//couleur gris
+		
+		glVertex3f(p2.x,p2.y,p2.z);
+		glVertex3f(p_.x,p_.y, p_.z);
+		glVertex3f(p.x,p.y, p.z);	
 
 
 	}
@@ -98,12 +99,51 @@ void drawCylindre(float r,float h,const int nbmeridiens){
 
 }
 
+void drawSphere(float r,float nbmeridiens,float nbparalleles){
+
+	float anglemeridiens = (2*M_PI)/nbmeridiens;
+	float angleparalleles = M_PI/nbparalleles;
+
+	
+	glBegin(GL_TRIANGLES);	
+
+	for(float i=0;i<nbmeridiens;i++){
+		for(float j=0;j<nbparalleles;j++){
+			
+			point3 p = point3(r*sin(angleparalleles*j)*cos(anglemeridiens*i),r*sin(angleparalleles*j)*sin(anglemeridiens*i),r*cos(angleparalleles*j));
+			point3 p_ = point3(r*sin(angleparalleles*j)*cos(anglemeridiens*(i+1)),r*sin(angleparalleles*j)*sin(anglemeridiens*(i+1)),r*cos(angleparalleles*j));
+			point3 p2 = point3(r*sin(angleparalleles*(j+1))*cos(anglemeridiens*i),r*sin(angleparalleles*(j+1))*sin(anglemeridiens*i),r*cos(angleparalleles*(j+1)));
+
+			glColor3f(0.7,0.7,0.7);//couleur gris
+			glVertex3f(p.x,p.y, p.z);
+			glVertex3f(p2.x,p2.y,p2.z);
+			glVertex3f(p_.x,p_.y, p_.z);
+
+
+			point3 p3 = point3(r*sin(angleparalleles*(j+1))*cos(anglemeridiens*(i+1)),r*sin(angleparalleles*(j+1))*sin(anglemeridiens*(i+1)),r*cos(angleparalleles*(j+1)));
+
+			glColor3f(0.2,0.2,0.0);//couleur gris
+			glVertex3f(p2.x,p2.y,p2.z);
+			glVertex3f(p3.x,p3.y, p3.z);
+			glVertex3f(p_.x,p_.y, p_.z);
+
+		}
+	}
+	glEnd();
+}
+
+void drawCone(){
+
+}
+
 
 /* Dessin */
 void display(void)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //effacement du buffer
 
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
 	//Description de la scene
 	glLoadIdentity();
 	//rotation de la scene suivant les mouvements de la souris
@@ -116,7 +156,8 @@ void display(void)
 
 			
 			
-			drawCylindre(2.,10.,6);		
+		//drawCylindre(2.,10.,360);	
+		//drawSphere(10.,180.,180.);	
 
 
 	//affiche les axes du repere
